@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - ./:/go/src/github.com/coolomina/terraform_plugin_dkronjob
+    command: tail -f /dev/null
+
+  deps:
+    build:
+      context: .
+      target: deps
+    volumes:
+      - ./:/go/src/github.com/coolomina/terraform_plugin_dkronjob
+
+  dkron:
+    image: dkron/dkron:v1.1.0
+    ports:
+      - 8081:8080
+    command: agent --server   --log-level debug
