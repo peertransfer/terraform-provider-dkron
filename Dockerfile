@@ -2,7 +2,7 @@ FROM hashicorp/terraform:0.11.11 as terraform
 
 FROM golang:1.11.2-alpine3.7 as base
 ENV GOPATH /go
-ENV WORKDIR $GOPATH/src/github.com/coolomina/terraform_plugin_dkronjob
+ENV WORKDIR $GOPATH/src/github.com/peertransfer/terraform_plugin_dkron
 WORKDIR $WORKDIR
 
 FROM base as deps

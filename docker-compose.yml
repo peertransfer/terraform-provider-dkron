@@ -5,7 +5,7 @@ services:
       context: .
       target: dev
     volumes:
-      - ./:/go/src/github.com/coolomina/terraform_plugin_dkronjob
+      - ./:/go/src/github.com/peertransfer/terraform_plugin_dkron
     command: tail -f /dev/null
 
   deps:
@@ -13,7 +13,7 @@ services:
       context: .
       target: deps
     volumes:
-      - ./:/go/src/github.com/coolomina/terraform_plugin_dkronjob
+      - ./:/go/src/github.com/peertransfer/terraform_plugin_dkron
 
   dkron:
     image: dkron/dkron:v1.1.0

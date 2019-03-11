@@ -1,4 +1,7 @@
 vendor
 *.tfstate
+*.backup
 plugins/
 .terraform
+*.log
+.tool-versions
