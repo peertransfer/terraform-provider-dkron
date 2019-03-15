@@ -33,4 +33,4 @@ $ make plan
 ```shell
 $ make apply
 ```
-# terraform_plugin_dkron
+# terraform-provider-dkron

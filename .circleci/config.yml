@@ -1,35 +1,45 @@
 version: 2
 jobs:
   build:
-    branches:
-    only:
-      - master
-    working_directory: /go/src/github.com/peertransfer/terraform-provider-dkron
     docker:
-      - image: circleci/golang:1.11
+      - image: circleci/golang:1.12
+        environment:
+          GO111MODULE: "on"
 
     steps:
       - checkout
 
       - run:
-          name: Installs dep
-          command: |
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            chmod +x /go/bin/dep
-
-      - run:
-          name: Ensure dependecies
-          command: |
-            /go/bin/dep ensure -v
-
-      - run:
           name: Build provider
           command: |
             VERSION=$(cat .semver)
-            go build -o ./terraform-provider-dkron_v$VERSION
+            go build -mod=vendor -o ./terraform-provider-dkron_v$VERSION
+
+      - run:
+          name: Test provider
+          command: |
+            echo "Nothing to test yet..."
+
+  release:
+    docker:
+      - image: circleci/golang:1.12
+    
+    steps:
       - run:
           name: Publish Release on GitHub
           command: |
             go get github.com/tcnksm/ghr
             VERSION=$(cat .semver)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./terraform-provider-dkron_v$VERSION
+
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - build
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

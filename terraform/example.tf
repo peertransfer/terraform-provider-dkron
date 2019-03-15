@@ -1,7 +1,7 @@
 provider "dkron" {
   host = "http://dkron:8080"
 
-  version = "0.0.1"
+  # version = "0.0.1"
 }
 
 resource "dkron_job" "my-job" {

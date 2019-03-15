@@ -1,4 +1,3 @@
-vendor
 *.tfstate
 *.backup
 plugins/
