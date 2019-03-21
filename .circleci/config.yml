@@ -30,8 +30,9 @@ jobs:
       - run:
           name: Publish Release on GitHub
           command: |
-            go get github.com/tcnksm/ghr
             VERSION=$(cat .semver)
+            go build -mod=vendor -o ./terraform-provider-dkron_v$VERSION
+            go get github.com/tcnksm/ghr
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./terraform-provider-dkron_v$VERSION
 
 workflows:
