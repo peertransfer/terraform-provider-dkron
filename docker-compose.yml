@@ -5,15 +5,9 @@ services:
       context: .
       target: dev
     volumes:
-      - ./:/go/src/github.com/peertransfer/terraform_plugin_dkron
+      - ./:/go/src/github.com/peertransfer/terraform-provider-dkron
     command: tail -f /dev/null
-
-  deps:
-    build:
-      context: .
-      target: deps
-    volumes:
-      - ./:/go/src/github.com/peertransfer/terraform_plugin_dkron
+    init: true
 
   dkron:
     image: dkron/dkron:v1.1.0

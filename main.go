@@ -4,7 +4,7 @@ import (
   "github.com/hashicorp/terraform/plugin"
 	"github.com/hashicorp/terraform/terraform"
 	
-	"github.com/peertransfer/terraform_plugin_dkron/dkron"
+	"github.com/peertransfer/terraform-provider-dkron/dkron"
 )
 
 func main() {
