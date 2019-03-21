@@ -23,8 +23,10 @@ jobs:
   release:
     docker:
       - image: circleci/golang:1.12
-    
+
     steps:
+      - checkout
+
       - run:
           name: Publish Release on GitHub
           command: |
