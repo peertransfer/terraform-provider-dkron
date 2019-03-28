@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"time"
+	"fmt"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"gopkg.in/resty.v1"
@@ -34,6 +35,11 @@ func resourceJob() *schema.Resource {
 			},
 			"owner": &schema.Schema{
 				Type:     schema.TypeString,
+				Required: false,
+				Optional: true,
+			},
+			"retries": &schema.Schema{
+				Type:     schema.TypeInt,
 				Required: false,
 				Optional: true,
 			},
@@ -118,19 +124,20 @@ func resourceJobCreate(d *schema.ResourceData, m interface{}) error {
 	jobresp := new(JobResponse)
 
 	job.Name = d.Get("name").(string)
-	job.Schedule = "@every 10s"
+	job.Schedule = d.Get("schedule").(string)
 	job.Owner = d.Get("owner").(string)
 	job.OwnerEmail = d.Get("owner_email").(string)
 	job.Disabled = d.Get("disabled").(bool)
-	job.Retries = 1
-	job.Executor = "shell"
+	job.Retries = d.Get("retries").(int)
+	job.Executor = d.Get("executor").(string)
 	job.ExecutorConfig.Command = d.Get("command").(string)
 	dkronHost := d.Get("dkron_host").(string)
 
+	jobsEndpoint := fmt.Sprintf("%s/v1/jobs", dkronHost)
 	resp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(job).
-		Post(dkronHost)
+		Post(jobsEndpoint)
 
 	if err != nil {
 		log.Fatal(err)
