@@ -28,4 +28,4 @@ build:
 
 release: build
 	go get github.com/tcnksm/ghr
-	ghr -t $$GITHUB_TOKEN -u $$CIRCLE_PROJECT_USERNAME -r $$CIRCLE_PROJECT_REPONAME -c $$CIRCLE_SHA1 -delete $$VERSION ./terraform-provider-dkron_v$(VERSION)
+	ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete $(VERSION) ./terraform-provider-dkron_v$(VERSION)
