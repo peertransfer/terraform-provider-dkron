@@ -1,3 +1,5 @@
+VERSION = $(shell cat .semver)
+
 dev:
 	docker-compose up --build -d dev
 	docker-compose up --build -d dkron
@@ -20,4 +22,10 @@ plan:
 
 apply:
 	docker-compose exec dev sh -c "cd terraform && terraform apply"
-	
+
+build:
+	go build -mod=vendor -o ./terraform-provider-dkron_v$(VERSION)
+
+release: build
+	go get github.com/tcnksm/ghr
+	ghr -t $$GITHUB_TOKEN -u $$CIRCLE_PROJECT_USERNAME -r $$CIRCLE_PROJECT_REPONAME -c $$CIRCLE_SHA1 -delete $$VERSION ./terraform-provider-dkron_v$(VERSION)

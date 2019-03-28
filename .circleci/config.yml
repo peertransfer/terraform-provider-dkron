@@ -12,8 +12,7 @@ jobs:
       - run:
           name: Build provider
           command: |
-            VERSION=$(cat .semver)
-            go build -mod=vendor -o ./terraform-provider-dkron_v$VERSION
+            make build
 
       - run:
           name: Test provider
@@ -30,11 +29,7 @@ jobs:
       - run:
           name: Publish Release on GitHub
           command: |
-            VERSION=$(cat .semver)
-            go build -mod=vendor -o ./terraform-provider-dkron_v$VERSION
-            go get github.com/tcnksm/ghr
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./terraform-provider-dkron_v$VERSION
-
+            make release
 workflows:
   version: 2
   pipeline:
