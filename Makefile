@@ -24,7 +24,7 @@ apply:
 	docker-compose exec dev sh -c "cd terraform && terraform apply"
 
 build:
-	go build -mod=vendor -o ./terraform-provider-dkron_v$(VERSION)
+	CGO_ENABLED=0 go build -mod=vendor -o ./terraform-provider-dkron_v$(VERSION)
 
 release: build
 	go get github.com/tcnksm/ghr
