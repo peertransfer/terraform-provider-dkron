@@ -131,6 +131,7 @@ func resourceJobCreate(d *schema.ResourceData, m interface{}) error {
 	job.Retries = d.Get("retries").(int)
 	job.Executor = d.Get("executor").(string)
 	job.ExecutorConfig.Command = d.Get("command").(string)
+	job.Concurrency = d.Get("concurrency").(string)
 	dkronHost := d.Get("dkron_host").(string)
 
 	jobsEndpoint := fmt.Sprintf("%s/v1/jobs", dkronHost)

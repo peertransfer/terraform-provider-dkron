@@ -14,4 +14,5 @@ resource "dkron_job" "my-job" {
     disabled = false
     schedule = "@every 10s"
     retries = 2
+    concurrency = "forbid"
 }
