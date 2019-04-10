@@ -15,4 +15,7 @@ resource "dkron_job" "my-job" {
     schedule = "@every 10s"
     retries = 2
     concurrency = "forbid"
+    tags = {
+      role = "willy"
+    }
 }
