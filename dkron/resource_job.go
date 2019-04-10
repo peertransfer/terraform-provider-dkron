@@ -73,6 +73,11 @@ func resourceJob() *schema.Resource {
 				Required: true,
 				Optional: false,
 			},
+			"tags": &schema.Schema{
+				Type:     schema.TypeMap,
+				Required: false,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -83,8 +88,7 @@ type Job struct {
 	Owner      string `json:"owner"`
 	OwnerEmail string `json:"owner_email"`
 	Disabled   bool   `json:"disabled"`
-	Tags       struct {
-	} `json:"tags"`
+  	Tags       map[string]interface{} `json:"tags"`
 	Retries        int         `json:"retries"`
 	Processors     interface{} `json:"processors"`
 	Concurrency    string      `json:"concurrency"`
@@ -105,8 +109,7 @@ type JobResponse struct {
 	LastSuccess  time.Time `json:"last_success"`
 	LastError    time.Time `json:"last_error"`
 	Disabled     bool      `json:"disabled"`
-	Tags         struct {
-	} `json:"tags"`
+	Tags       	 map[string]interface{} `json:"tags"`
 	Retries        int         `json:"retries"`
 	DependentJobs  interface{} `json:"dependent_jobs"`
 	ParentJob      string      `json:"parent_job"`
@@ -133,6 +136,7 @@ func resourceJobCreate(d *schema.ResourceData, m interface{}) error {
 	job.ExecutorConfig.Command = d.Get("command").(string)
 	job.Concurrency = d.Get("concurrency").(string)
 	dkronHost := d.Get("dkron_host").(string)
+	job.Tags = d.Get("tags").(map[string]interface{})
 
 	jobsEndpoint := fmt.Sprintf("%s/v1/jobs", dkronHost)
 	resp, err := resty.R().
