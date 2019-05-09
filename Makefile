@@ -23,6 +23,9 @@ plan:
 apply:
 	docker-compose exec dev sh -c "cd terraform && terraform apply"
 
+destroy:
+	docker-compose exec dev sh -c "cd terraform && terraform destroy"
+
 build:
 	CGO_ENABLED=0 go build -mod=vendor -o ./terraform-provider-dkron_v$(VERSION)
 

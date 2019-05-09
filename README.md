@@ -51,6 +51,10 @@ $ make plan
 $ make apply
 ```
 
+```shell
+$ make destroy
+```
+
 # TODO
 
 - [ ] Use Dkron client instead to hardcode it into the provider
