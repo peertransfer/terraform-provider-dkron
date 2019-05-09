@@ -2,9 +2,8 @@ package dkron
 
 import (
 	"encoding/json"
-	"log"
-	"time"
 	"fmt"
+	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"gopkg.in/resty.v1"
@@ -83,39 +82,39 @@ func resourceJob() *schema.Resource {
 }
 
 type Job struct {
-	Name       string `json:"name"`
-	Schedule   string `json:"schedule"`
-	Owner      string `json:"owner"`
-	OwnerEmail string `json:"owner_email"`
-	Disabled   bool   `json:"disabled"`
-  	Tags       map[string]interface{} `json:"tags"`
-	Retries        int         `json:"retries"`
-	Processors     interface{} `json:"processors"`
-	Concurrency    string      `json:"concurrency"`
-	Executor       string      `json:"executor"`
+	Name           string                 `json:"name"`
+	Schedule       string                 `json:"schedule"`
+	Owner          string                 `json:"owner"`
+	OwnerEmail     string                 `json:"owner_email"`
+	Disabled       bool                   `json:"disabled"`
+	Tags           map[string]interface{} `json:"tags"`
+	Retries        int                    `json:"retries"`
+	Processors     interface{}            `json:"processors"`
+	Concurrency    string                 `json:"concurrency"`
+	Executor       string                 `json:"executor"`
 	ExecutorConfig struct {
 		Command string `json:"command"`
 	} `json:"executor_config"`
 }
 
 type JobResponse struct {
-	Name         string    `json:"name"`
-	Timezone     string    `json:"timezone"`
-	Schedule     string    `json:"schedule"`
-	Owner        string    `json:"owner"`
-	OwnerEmail   string    `json:"owner_email"`
-	SuccessCount int       `json:"success_count"`
-	ErrorCount   int       `json:"error_count"`
-	LastSuccess  time.Time `json:"last_success"`
-	LastError    time.Time `json:"last_error"`
-	Disabled     bool      `json:"disabled"`
-	Tags       	 map[string]interface{} `json:"tags"`
-	Retries        int         `json:"retries"`
-	DependentJobs  interface{} `json:"dependent_jobs"`
-	ParentJob      string      `json:"parent_job"`
-	Processors     interface{} `json:"processors"`
-	Concurrency    string      `json:"concurrency"`
-	Executor       string      `json:"executor"`
+	Name           string                 `json:"name"`
+	Timezone       string                 `json:"timezone"`
+	Schedule       string                 `json:"schedule"`
+	Owner          string                 `json:"owner"`
+	OwnerEmail     string                 `json:"owner_email"`
+	SuccessCount   int                    `json:"success_count"`
+	ErrorCount     int                    `json:"error_count"`
+	LastSuccess    time.Time              `json:"last_success"`
+	LastError      time.Time              `json:"last_error"`
+	Disabled       bool                   `json:"disabled"`
+	Tags           map[string]interface{} `json:"tags"`
+	Retries        int                    `json:"retries"`
+	DependentJobs  interface{}            `json:"dependent_jobs"`
+	ParentJob      string                 `json:"parent_job"`
+	Processors     interface{}            `json:"processors"`
+	Concurrency    string                 `json:"concurrency"`
+	Executor       string                 `json:"executor"`
 	ExecutorConfig struct {
 		Command string `json:"command"`
 	} `json:"executor_config"`
@@ -123,6 +122,34 @@ type JobResponse struct {
 }
 
 func resourceJobCreate(d *schema.ResourceData, m interface{}) error {
+	return postJobData(d, m)
+}
+
+func resourceJobRead(d *schema.ResourceData, m interface{}) error {
+	return nil
+}
+
+func resourceJobUpdate(d *schema.ResourceData, m interface{}) error {
+	return postJobData(d, m)
+}
+
+func resourceJobDelete(d *schema.ResourceData, m interface{}) error {
+	jobID := d.Id()
+	dkronHost := d.Get("dkron_host").(string)
+	endpoint := fmt.Sprintf("%s/v1/jobs/%s", dkronHost, jobID)
+
+	_, err := resty.R().
+		SetHeader("Content-Type", "application/json").
+		Delete(endpoint)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func postJobData(d *schema.ResourceData, m interface{}) error {
 	job := new(Job)
 	jobresp := new(JobResponse)
 
@@ -145,7 +172,7 @@ func resourceJobCreate(d *schema.ResourceData, m interface{}) error {
 		Post(jobsEndpoint)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	json.Unmarshal(resp.Body(), &jobresp)
@@ -153,17 +180,4 @@ func resourceJobCreate(d *schema.ResourceData, m interface{}) error {
 	d.SetId(jobresp.Name)
 
 	return resourceJobRead(d, m)
-}
-
-func resourceJobRead(d *schema.ResourceData, m interface{}) error {
-
-	return nil
-}
-
-func resourceJobUpdate(d *schema.ResourceData, m interface{}) error {
-	return resourceJobRead(d, m)
-}
-
-func resourceJobDelete(d *schema.ResourceData, m interface{}) error {
-	return nil
 }
