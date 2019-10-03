@@ -18,4 +18,9 @@ resource "dkron_job" "my-job" {
     tags = {
       role = "willy"
     }
+    slack = {
+      channel = "#dkron-test-jobs"
+      onSuccess = true
+      team = "team1"
+    }
 }

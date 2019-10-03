@@ -60,6 +60,6 @@ $ make destroy
 - [ ] Use Dkron client instead to hardcode it into the provider
 - [ ] Decouple provider from resource
 - [ ] Add unit testing
-- [ ] Implement destroy
 - [ ] Complete API endpoints
+- [ ] (Terraform v0.12) Support nested maps for processors
 

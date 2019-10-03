@@ -42,6 +42,11 @@ func resourceJob() *schema.Resource {
 				Required: false,
 				Optional: true,
 			},
+			"slack": &schema.Schema{
+				Type:     schema.TypeMap,
+				Required: false,
+				Optional: true,
+			},
 			"owner_email": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: false,
@@ -81,6 +86,10 @@ func resourceJob() *schema.Resource {
 	}
 }
 
+type Processors struct {
+	Slack map[string]interface{} `json:"slack"`
+}
+
 type Job struct {
 	Name           string                 `json:"name"`
 	Schedule       string                 `json:"schedule"`
@@ -89,7 +98,7 @@ type Job struct {
 	Disabled       bool                   `json:"disabled"`
 	Tags           map[string]interface{} `json:"tags"`
 	Retries        int                    `json:"retries"`
-	Processors     interface{}            `json:"processors"`
+	Processors     Processors             `json:"processors"`
 	Concurrency    string                 `json:"concurrency"`
 	Executor       string                 `json:"executor"`
 	ExecutorConfig struct {
@@ -112,7 +121,7 @@ type JobResponse struct {
 	Retries        int                    `json:"retries"`
 	DependentJobs  interface{}            `json:"dependent_jobs"`
 	ParentJob      string                 `json:"parent_job"`
-	Processors     interface{}            `json:"processors"`
+	Processors     Processors             `json:"processors"`
 	Concurrency    string                 `json:"concurrency"`
 	Executor       string                 `json:"executor"`
 	ExecutorConfig struct {
@@ -162,6 +171,7 @@ func postJobData(d *schema.ResourceData, m interface{}) error {
 	job.Executor = d.Get("executor").(string)
 	job.ExecutorConfig.Command = d.Get("command").(string)
 	job.Concurrency = d.Get("concurrency").(string)
+	job.Processors.Slack = d.Get("slack").(map[string]interface{})
 	dkronHost := d.Get("dkron_host").(string)
 	job.Tags = d.Get("tags").(map[string]interface{})
 
