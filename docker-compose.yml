@@ -10,7 +10,7 @@ services:
     init: true
 
   dkron:
-    image: dkron/dkron:v1.1.0
+    image: dkron/dkron:v1.2.4
     ports:
       - 8081:8080
     command: agent --server   --log-level debug
