@@ -14,9 +14,10 @@ resource "dkron_job" "my-job" {
     name = "hola_from_tf"
     owner = "omar"
     owner_email = "a@a.com"
-    dkron_host = "http://dkron:8080"
     executor = "shell"
-    command = "date"
+    executor_config{
+        command = "date"
+    }
     disabled = false
 }
 ```
@@ -58,8 +59,8 @@ $ make destroy
 # TODO
 
 - [ ] Use Dkron client instead to hardcode it into the provider
-- [ ] Decouple provider from resource
+- [X] Decouple provider from resource
 - [ ] Add unit testing
 - [ ] Complete API endpoints
-- [ ] (Terraform v0.12) Support nested maps for processors
+- [X] (Terraform v0.12) Support nested maps for processors
 

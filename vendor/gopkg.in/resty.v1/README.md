@@ -101,7 +101,7 @@ require gopkg.in/resty.v1 v1.12.0
 go get -u gopkg.in/resty.v1
 ```
 
-#### Heads up for upcoming Resty v2
+#### Heads up for upcoming Resty v2 
 
 Resty v2 release will be moving away from `gopkg.in` proxy versioning. It will completely follow and adpating Go Mod versioning recommendation. For e.g.: module definition would be `module github.com/go-resty/resty/v2`.
 
