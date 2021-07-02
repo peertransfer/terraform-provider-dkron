@@ -1,26 +1,24 @@
 provider "dkron" {
-  host = "http://dkron:8080"
+  host = "http://192.168.58.235:9191"
 
   # version = "0.0.1"
 }
 
-resource "dkron_job" "my-job" {
-    name = "lolaso"
-    owner = "omar"
-    owner_email = "a@a.com"
-    dkron_host = "http://dkron:8080"
+resource "dkron_job" "job" {
+    name = "delete-nat"
+    owner = "wangzhihu"
+    owner_email = "wangzhihu@lixiang.com"
     executor = "shell"
-    command = "date"
+    executor_config = {
+      command = "echo 12344"
+    }
+    timezone = "Asia/Shanghai"
     disabled = false
-    schedule = "@every 10s"
+    #schedule = "@every 10s"
+    schedule = "@at 2021-07-02T07:27:00Z"
     retries = 2
     concurrency = "forbid"
     tags = {
-      role = "willy"
-    }
-    slack = {
-      channel = "#dkron-test-jobs"
-      onSuccess = true
-      team = "team1"
+      role = "dkron:1"
     }
 }
